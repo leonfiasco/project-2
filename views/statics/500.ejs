@@ -1,0 +1,8 @@
+<h1>500: Internal Server Error</h1>
+
+<% if(!process.env.host){ %>
+<h2><%= err.message %></h2>
+<% } %>
+
+
+<!-- If we are in production, don't show the message. Or else we are running locally and show the message. Locally, this key is not defined.

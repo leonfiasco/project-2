@@ -1,21 +1,19 @@
 const mongoose = require('mongoose');
 //requiring bcrypt
 const bcrypt = require('bcrypt');
-//name of the database
-mongoose.connect('mongodb://localhost/kick-frame');
 //to use promises im providing a promise library
-const Promise = require('bluebird');
-mongoose.Promise = Promise;
+mongoose.Promise = require('bluebird');
 
 
-const schema = new mongoose.Schema({
+
+const userSchema = new mongoose.Schema({
   username: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true }
 });
 
 //setting up passwordConfirmation virtual that will not be added to the database
-schema
+userSchema
   .virtual('passwordConfirmation')
   .set(function setPaswordConfirmation(passwordConfirmation){
     //storing the password on the user model temporarily so it can be accessed in pre-validate hook
@@ -24,7 +22,7 @@ schema
   });
 
 //setting up a pre-validate hook
-schema.pre('validate', function checkPassword(next){
+userSchema.pre('validate', function checkPassword(next){
   //checks if password has been modified and if so whether password and passwordConfirmation match
   //if not invalidate passwordConfirmation, so that the validations fails
   if(this.isModified('password') && this._passwordConfirmation !== this.password) this.invalidate('passwordConfirmation', 'does not match');
@@ -34,7 +32,7 @@ schema.pre('validate', function checkPassword(next){
 
 });
 
-schema.pre('save', function hashPassword(next){
+userSchema.pre('save', function hashPassword(next){
   //if password is modified, it needs to be hashed
   if(this.ismodified('password')) {
     // hashing password with bcrypt and store the hashed password on the user object
@@ -47,4 +45,4 @@ schema.pre('save', function hashPassword(next){
 
 });
 
-module.exports = mongoosoe.model('User', userSchema);
+module.exports = mongoose.model('User', userSchema);
