@@ -1,4 +1,9 @@
 <%= locals.user %>
+<% if(locals.isAuthenticated) { %>
+  <a class="navbar-item" href="/logout">Logout</a>
+<% } %>
+
+
 <nav>
     <div class="nav-wrapper">
       <a href="#" class="brand-logo center">Kick Frame</a>

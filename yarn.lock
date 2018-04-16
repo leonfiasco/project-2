@@ -359,6 +359,10 @@ configstore@^3.0.0:
     write-file-atomic "^2.0.0"
     xdg-basedir "^3.0.0"
 
+connect-flash@0.1.x:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/connect-flash/-/connect-flash-0.1.1.tgz#d8630f26d95a7f851f9956b1e8cc6732f3b6aa30"
+
 console-control-strings@^1.0.0, console-control-strings@~1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/console-control-strings/-/console-control-strings-1.1.0.tgz#3d7cf4464db6446ea644bf4b39507f9851008e8e"
@@ -567,6 +571,12 @@ expand-brackets@^2.1.4:
 express-ejs-layouts@^2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/express-ejs-layouts/-/express-ejs-layouts-2.4.0.tgz#00612e536f71c9d648e483072667ae85fd5f6d3a"
+
+express-flash@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/express-flash/-/express-flash-0.0.2.tgz#23d1a8bcf3f90d707928e489f96869ecad0acda2"
+  dependencies:
+    connect-flash "0.1.x"
 
 express-session@^1.15.6:
   version "1.15.6"

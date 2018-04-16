@@ -10,7 +10,7 @@ router.get('/about', (req, res) => res.render('pages/about'));
 router.get('/register', (req, res) => res.render('pages/register'));
 router.get('/login', (req, res) => res.render('pages/login'));
 
-
+router.get('/logout', sessions.delete);
 
 
 //authentication
