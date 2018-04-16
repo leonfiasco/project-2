@@ -24,6 +24,22 @@ function createRoute(req, res) {
     });
 }
 
+
+function sessionCreate(req, res, next){
+  User
+    .findOne({ email: req.body.email })
+    .then(user => {
+    // if statement for if the user cant be found or did not supply a valid password
+      if(!user || !user.validatePassword(req.body.password)) {
+        //sends user back to login page
+        return res.redirect('/login');
+      }
+      //otherwise send user to homepage
+      res.redirect('/');
+    })
+    .catch(next);
+}
+
 function deleteRoute(req, res){
   //regenerate()wipes clean the session
   return req.session.regenerate(() => res.redirect('/'));

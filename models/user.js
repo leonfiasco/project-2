@@ -45,4 +45,10 @@ userSchema.pre('save', function hashPassword(next){
 
 });
 
+//compareSync compares a plain text password against the hashed one stored on the user object
+userSchema.methods.validatePassword = function validatePassword(password) {
+  return bcrypt.compareSync(password, this.password);
+};
+
+
 module.exports = mongoose.model('User', userSchema);
