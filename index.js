@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 8000;
 const expressLayouts = require('express-ejs-layouts');
 //requiring router
 const router = require('./config/router');
-//requiring mongoose
+
 
 
 //configuring express to use ejs
