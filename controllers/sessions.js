@@ -2,7 +2,7 @@
 const User = require('../models/user');
 
 function newRoute(req, res) {
-  res.render('sessions/index');
+  res.render('pages/login');
 }
 
 //this is creating a new sessions

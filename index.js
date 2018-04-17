@@ -15,13 +15,13 @@ const bodyParser = require('body-parser');
 
 const User = require('./models/user');
 
-const { port, database } = require('./config/env');
+const { port, db } = require('./config/env');
 
 const mongoose = require('mongoose');
 
 mongoose.Promise = require('bluebird');
 
-mongoose.connect(database);
+mongoose.connect(db);
 
 // setting up middleware
 //setting up express-session

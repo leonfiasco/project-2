@@ -2,6 +2,7 @@
 const router = require('express').Router();
 const registrations = require('../controllers/registration');
 const sessions = require('../controllers/sessions');
+const trainers = require('../controllers/trainers');
 
 function secureRoute(req, res, next) {
   //if the user is not logged in
@@ -37,8 +38,10 @@ function secureRoute(req, res, next) {
 //adding routes
 router.get('/', (req, res) => res.render('pages/home'));
 router.get('/about', (req, res) => res.render('pages/about'));
-router.get('/register', (req, res) => res.render('pages/register'));
-router.get('/login', (req, res) => res.render('pages/login'));
+
+
+router.route('/trainers')
+  .get(trainers.index);
 
 router.get('/logout', sessions.delete);
 
