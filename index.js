@@ -8,63 +8,23 @@ const expressLayouts = require('express-ejs-layouts');
 const router = require('./config/router');
 //requiring express-sessions
 const session = require('express-session');
-
+//requiring express-flash
 const flash = require('express-flash');
-
+// requiring body-parser which take info from use and takes it to the server
 const bodyParser = require('body-parser');
 
 const User = require('./models/user');
 
-const { port, db } = require('./config/env');
+const { port, database } = require('./config/env');
 
 const mongoose = require('mongoose');
+
 mongoose.Promise = require('bluebird');
 
-mongoose.connect(db);
+mongoose.connect(database);
 
 // setting up middleware
 //setting up express-session
-app.use(session({
-  // a random key used to encrypt the session cookie
-  secret: 'GysHa^72u91sk0P(',
-  resave: false,
-  saveUninitialized: false
-}));
-
-app.use((req, res, next) =>{
-  //if there is no user Id,then thers nothing to do, move to routes
-  if(!req.session.userId) return next();
-
-  //otherwise use id to find user in database
-  User
-    .findById(req.session.userId)
-    .then(user => {
-
-    //if user haasn't been found || if they deleted their account
-    //log them out (delete the data in the session)
-      if(!user) req.session.regenerate(() => res.redirect('/login'));
-
-
-      //it gives a boolean value to say whether the user is logged in or nnot
-      res.locals.isAuthenticated = true;
-      res.locals.currentUser = user;
-
-      //store the user data on 'req' to be used inside the controllers
-      req.currentUser = user;
-
-
-      next();
-
-    });
-});
-
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'ssh it\'s a secret',
-  resave: false,
-  saveUninitialized: false
-}));
-
-app.use(flash());
 
 //configuring express to use ejs
 app.set('view engine', 'ejs');
@@ -73,14 +33,36 @@ app.set('views', `${__dirname}/views`);
 //tell express to use express-ejs-layouts
 app.use(expressLayouts);
 
-
 //telling express to look the folder for static files
 app.use(express.static(`${__dirname}/public`));
-
 app.use(bodyParser.urlencoded({ extended: true }));
 
-//adding request listener to serve home template
-app.get('/', (req, res) => res.render('pages/home'));
+app.use(session({
+  secret: 'my super secret token', //Sign the session ID cookie. The content of the cookie will be encrypted using this, so if you open the cookie in Chrome dev tools the contents will be gibberish.
+  resave: false, // Not sure what this really does.
+  saveUninitialized: false // Prevents saving sessions that are not modified. (Not sure what this really means, but magic I guess.)
+}));
+
+app.use(flash());
+
+app.use((req, res, next) =>{
+  //if there is no user ID, then there is nothing to do, move on to the routes
+  if(!req.session.userId) return next();
+
+  //otherwise use the ID to find the user in the database
+  User
+    .findById(req.session.userId)
+    .then((user) =>{
+      req.session.userId = user._id; // This has been set in sessions.create in the sessions model order to store the userId on the client's machine. Here we set req.session.userId to be the same as the ID of the user's document in the database, then change the currentUser to User and set isLoggedIn to true.
+      res.locals.user = user;
+      req.currentUser = user;
+      res.locals.isLoggedIn = true;
+      next();
+    });
+// res contains locals, locals contains user because we put it there.
+});
+
+
 
 //tell express to use Router
 app.use(router);
