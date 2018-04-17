@@ -1,7 +1,4 @@
-<%= locals.user %>
-<% if(locals.isAuthenticated) { %>
-  <a class="navbar-item" href="/logout">Logout</a>
-<% } %>
+
 
 
 <nav>
@@ -12,6 +9,12 @@
         <li><a href="/about">About</a></li>
         <li><a href="/register">Register</a></li>
         <li><a href="/login">Login</a></li>
+
+
+        <%= locals.user %>
+        <% if(locals.isAuthenticated) { %>
+          <a class="navbar-item" href="/logout">Logout</a>
+        <% } %>
 
       </ul>
     </div>

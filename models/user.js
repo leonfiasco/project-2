@@ -13,42 +13,32 @@ const userSchema = new mongoose.Schema({
 });
 
 //setting up passwordConfirmation virtual that will not be added to the database
-userSchema
-  .virtual('passwordConfirmation')
-  .set(function setPaswordConfirmation(passwordConfirmation){
-    //storing the password on the user model temporarily so it can be accessed in pre-validate hook
-    //`this.` refers to the user object``
-    this._passwordConfirmation = passwordConfirmation;
+// This function is called in sessions in order to check if the password entered is the same as the password already in the database.
+userSchema.methods.validatePassword = function validatePassword(password) {
+  return bcrypt.compareSync(password, this.password); // Throws a validationError if invalid.
+};
+
+// This is a virtual property that's temporary stored (not actually put into the database) so we can later use it to confirm if "password confirmation" is indeed the same as "password".
+userSchema.virtual('passwordConfirmation')
+  .set(function setPasswordConfirmation(passwordConfirmation) {
+    this._passwordConfirmation = passwordConfirmation; // Storing passwordConfirmation into _passwordConfirmation in the user schema.
   });
 
-//setting up a pre-validate hook
-userSchema.pre('validate', function checkPassword(next){
-  //checks if password has been modified and if so whether password and passwordConfirmation match
-  //if not invalidate passwordConfirmation, so that the validations fails
-  if(this.isModified('password') && this._passwordConfirmation !== this.password) this.invalidate('passwordConfirmation', 'does not match');
-
-  //otherwise continue to the next step (validate)
-  next();
-
-});
-
-userSchema.pre('save', function hashPassword(next){
-  //if password is modified, it needs to be hashed
-  if(this.ismodified('password')) {
-    // hashing password with bcrypt and store the hashed password on the user object
-    this.password = bcrypt.hashSync(this.password, bcrypt.genSaltSync(8));
+// This is saying that before validating. A pre('validate') hook must be called before a pre('save') hook, because a pre('save') hook will trigger validate.
+userSchema.pre('validate', function checkPassword(next) {
+  if(this.isModified('password') && this._passwordConfirmation !== this.password) {
+    this.invalidate('passwordConfirmation', 'does not match'); //Creates a ValidationError in controllers/registrations.
   }
-
-  //continue to the step
   next();
-
-
 });
 
-//compareSync compares a plain text password against the hashed one stored on the user object
-userSchema.methods.validatePassword = function validatePassword(password) {
-  return bcrypt.compareSync(password, this.password);
-};
+// This is encrypting the password. The .isModified works even if the password is being created from nothing. The password is not hashed until this point.
+userSchema.pre('save', function HashPassword(next) {
+  if(this.isModified('password')) { // I'm not sure why we need isModified here. Is this just so that when we re-seed the database, it will not re-hash the password again? I don't understand why that's a concern.
+    this.password = bcrypt.hashSync(this.password, bcrypt.genSaltSync(8)); //Hashes the password and generates the token
+  }
+  next();
+});
 
 
 module.exports = mongoose.model('User', userSchema);

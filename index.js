@@ -2,33 +2,27 @@
 const express = require('express');
 // creating the app
 const app = express();
-//setting up the port
-const PORT = process.env.PORT || 8000;
 //tell express to use express-ejs-layouts
 const expressLayouts = require('express-ejs-layouts');
 //requiring router
 const router = require('./config/router');
 //requiring express-sessions
 const session = require('express-session');
-//adding middleware
-const router = require('express').Router();
-const sessions = require('../controllers/sessions');
 
-function secureRoute(req, res, next) {
-  //if the user is not logged in
-  if(!req.session.userId) {
-    //clears the session cookie and redirect them to the login pages
-    return req.session.regenerate(() => res.redirect('/login'));
-  }
+const flash = require('express-flash');
 
-  next();
-}
+const bodyParser = require('body-parser');
 
-//thesse routes are now restricted and can only be accessed by a logged in user
-app.get('/sessions/new', secureRoute, sessions.new);
-app.post('/sessions', secureRoute, sessions.create);
+const User = require('./models/user');
 
+const { port, db } = require('./config/env');
 
+const mongoose = require('mongoose');
+mongoose.Promise = require('bluebird');
+
+mongoose.connect(db);
+
+// setting up middleware
 //setting up express-session
 app.use(session({
   // a random key used to encrypt the session cookie
@@ -40,7 +34,6 @@ app.use(session({
 app.use((req, res, next) =>{
   //if there is no user Id,then thers nothing to do, move to routes
   if(!req.session.userId) return next();
-
 
   //otherwise use id to find user in database
   User
@@ -73,19 +66,6 @@ app.use(session({
 
 app.use(flash());
 
-function secureRoute(req, res, next) {
-  if (!req.session.userId) {
-    return req.session.regenerate(() => {
-      req.flash('danger', 'You must be logged in.');
-      res.redirect('/login');
-    });
-  }
-
-  return next();
-}
-
-
-
 //configuring express to use ejs
 app.set('view engine', 'ejs');
 //looks for files in my views folder
@@ -97,6 +77,8 @@ app.use(expressLayouts);
 //telling express to look the folder for static files
 app.use(express.static(`${__dirname}/public`));
 
+app.use(bodyParser.urlencoded({ extended: true }));
+
 //adding request listener to serve home template
 app.get('/', (req, res) => res.render('pages/home'));
 
@@ -104,4 +86,4 @@ app.get('/', (req, res) => res.render('pages/home'));
 app.use(router);
 
 
-app.listen(PORT, () => console.log(`Up and running on port ${PORT}`));
+app.listen(port, () => console.log(`Up and running on port ${port}`));

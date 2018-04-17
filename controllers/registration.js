@@ -10,15 +10,15 @@ function newRoute(req, res) {
 function createRoute(req, res){
   User
     .create(req.body)
-    .then(() => {
-      res.redirect('/');
-    })
+    .then(() => res.redirect('/'))
     .catch((err) => {
       //This is just what mongodb calls a validation error
       // if the stuff the user input does not match the criteria set out in the model.
-      if(err.name === 'ValidationError'){
-        return res.status(400).render('registrations/index', {message: err.toString()});
-      }
+
+      console.log(err);
+      // if(err.name === 'ValidationError'){
+      //   return res.status(400).render('registrations/index', {message: err.toString()});
+      // }
     });
 }
 
