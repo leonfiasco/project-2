@@ -12,6 +12,8 @@ const session = require('express-session');
 const flash = require('express-flash');
 // requiring body-parser which take info from use and takes it to the server
 const bodyParser = require('body-parser');
+// Import the methodOverride (for using the _method on Internet Explorer)
+const methodOverride = require('method-override');
 
 const User = require('./models/user');
 
@@ -30,8 +32,19 @@ mongoose.connect(db);
 app.set('view engine', 'ejs');
 //looks for files in my views folder
 app.set('views', `${__dirname}/views`);
+
+
+
 //tell express to use express-ejs-layouts
 app.use(expressLayouts);
+
+app.use(methodOverride(req => {
+  if(req.body && typeof req.body === 'object' && '_method' in req.body) { // I don't understand why we need to verify if req.body is an object here. Isn't req.body always an object, given that if it exists, it is always created using a form?
+    const method = req.body._method;
+    delete req.body._method; // The _method property is deleted so it isn't stored in the database.
+    return method;
+  }
+}));
 
 //telling express to look the folder for static files
 app.use(express.static(`${__dirname}/public`));

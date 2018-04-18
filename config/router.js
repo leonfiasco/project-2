@@ -41,7 +41,20 @@ router.get('/about', (req, res) => res.render('pages/about'));
 
 
 router.route('/trainers')
-  .get(trainers.index);
+  .get(trainers.index)
+  .post(trainers.create);
+
+router.route('/trainers/new')
+  .get(trainers.new);
+
+router.route('/trainers/:id')
+  .get(trainers.show);
+
+router.route('/trainers/:id/edit')
+  .get(trainers.edit);
+
+router.route('/trainers')
+  .put(trainers.update);
 
 router.get('/logout', sessions.delete);
 
@@ -54,9 +67,14 @@ router.route('/login')
   .get(sessions.new)
   .post(sessions.create);
 
+
 router.route('/logout')
   .get(secureRoute, sessions.delete);
 
 //authentication ends
+router.route('/*').get((req, res) => {
+  req.flash('danger', 'THE URL REQUESTED DOESN\'T EXIST');
+  res.redirect('/'); //This renders the error on the homepage
+});
 
 module.exports = router;

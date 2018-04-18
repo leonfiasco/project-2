@@ -1,0 +1,25 @@
+<h2>Edit</h2>
+
+<%= trainer %>
+
+<form class="col l12" action="/trainers" method="post">
+  <div class="input-field col l12">
+    <input type="text" name="name" id="name_field" value="<%= trainer.name %>">
+    <label for="name-field">Name</label>
+  </div>
+  <div class="input-field col l12">
+    <input type="number" name="year" id="year_field" required value="<%= trainer.year %>">
+    <label for="year_field">Year</label>
+  </div>
+  <div class="input-field col l12">
+    <input type="text" name="description" id="description_field" required value="<%= trainer.description %>">
+    <label for="description_field">Description</label>
+  </div>
+  <div class="input-field col l12">
+    <input type="text" name="url" id="url_field" required value="<%= trainer.url %>">
+    <label for="url_field">Url</label>
+  </div>
+  <div class="input-field col l12">
+    <button class="green btn">Upload</button>
+  </div>
+</form>

@@ -6,6 +6,9 @@
       <li><a href="/about">About</a></li>
       <% if(locals.isLoggedIn) { %>
         <li><a class="navbar-item" href="/logout">Logout</a></li>
+        <li><a class="navbar-item" href="/trainers">View Trainers</a></li>
+        <li><a class="navbar-item" href="/trainers/new">Add A Trainer</a></li>
+      
       <% } else { %>
         <li><a href="/register">Register</a></li>
         <li><a href="/login">Login</a></li>
