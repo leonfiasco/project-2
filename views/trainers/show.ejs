@@ -2,10 +2,16 @@
 
 <h2><%= trainer.name %></h2>
 <img src="<%= trainer.url %>" />
+<div class="row">
+  <h3 class="col l10"><%= trainer.name %></h3>
+  <div class="col l2">
+    <form action="/trainers/<%= trainer.id %>" method="post">
+      <input type="hidden" name="_method" value="DELETE">
+      <button class="btn red">Delete</button>
+    </form>
+  </div>
+</div>
 
-<a href="/trainers/<%= trainer.id %>/edit">Edit Trainer</a>
-<%# //this is probable wrong i wasnt sure if i was meant
-//to creat a page for update or whether it should appear
-//in show
-// also the link /trainers wont it take me back to the %>
-<a href="/trainers/<%= trainer.id %>/update">update Trainer</a>
+<a href="/trainers/<%= trainer.id %>/edit"><button class='btn green'>Edit Trainer</button></a>
+
+<a href="/trainers/<%= trainer.id %>/update"><button class='btn orange'>Update Trainer</button></a>

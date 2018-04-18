@@ -38,6 +38,11 @@ app.set('views', `${__dirname}/views`);
 //tell express to use express-ejs-layouts
 app.use(expressLayouts);
 
+//telling express to look the folder for static files
+app.use(express.static(`${__dirname}/public`));
+app.use(bodyParser.urlencoded({ extended: true }));
+
+//making sure methodOverride is running after body-bodyParser
 app.use(methodOverride(req => {
   if(req.body && typeof req.body === 'object' && '_method' in req.body) { // I don't understand why we need to verify if req.body is an object here. Isn't req.body always an object, given that if it exists, it is always created using a form?
     const method = req.body._method;
@@ -45,10 +50,6 @@ app.use(methodOverride(req => {
     return method;
   }
 }));
-
-//telling express to look the folder for static files
-app.use(express.static(`${__dirname}/public`));
-app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(session({
   secret: 'my super secret token', //Sign the session ID cookie. The content of the cookie will be encrypted using this, so if you open the cookie in Chrome dev tools the contents will be gibberish.

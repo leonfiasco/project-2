@@ -2,7 +2,9 @@
 
 <%= trainer %>
 
-<form class="col l12" action="/trainers" method="post">
+<form class="col l12" action="/trainers/<%= trainer.id %>" method="post">
+  <input type="hidden" name="_method" value="put">
+
   <div class="input-field col l12">
     <input type="text" name="name" id="name_field" value="<%= trainer.name %>">
     <label for="name-field">Name</label>

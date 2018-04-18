@@ -15,23 +15,6 @@ function secureRoute(req, res, next) {
   next();
 }
 
-// function flashRoute(req, res, next) {
-//   if (!req.session.userId) {
-//     return req.sesssion.regenerate(() =>{
-//       req.flash('danger', 'you must be logged in.');
-//       res.redirect('/login');
-//     });
-//   }
-//
-//   //reassigning the session id for good measure
-//   req.session.userId = user._id;
-//
-//   res.locals.user = user;
-//   res.locals.isLoggedIn = true;
-//
-//   return next();
-//
-// }
 
 
 
@@ -48,13 +31,13 @@ router.route('/trainers/new')
   .get(trainers.new);
 
 router.route('/trainers/:id')
-  .get(trainers.show);
+  .get(trainers.show)
+  .put(trainers.update)
+  .delete(trainers.delete);
 
 router.route('/trainers/:id/edit')
   .get(trainers.edit);
 
-router.route('/trainers')
-  .put(trainers.update);
 
 router.get('/logout', sessions.delete);
 

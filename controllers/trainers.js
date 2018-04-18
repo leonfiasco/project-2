@@ -46,13 +46,11 @@ function trainersEdit(req, res){
 }
 
 function trainersUpdate(req, res){
-  console.log(req.body);
   Trainer
     .findById(req.params.id)
     .exec()
     .then(trainer => {
-      console.log(trainer);
-    //assigns the contents of req.body to album
+      // assigns the contents of req.body to album
       trainer = Object.assign(trainer, req.body);
       return trainer.save();
     })

@@ -1,11 +1,24 @@
 <h1>Index</h1>
-
+<div class="row">
 <ul>
   <% trainers.forEach(trainer => { %>
-    <li>
-      <h2><%= trainer.name %></h2>
-      <img src="<%= trainer.url %>" />
-      <a href="/trainers/<%= trainer.id %>">View Trainer</a>
-    </li>
-  <% }); %>
+
+
+
+
+  <div class="col s6 m6">
+    <div class="card">
+      <div class="card-image">
+        <img src="<%= trainer.url %>">
+        <span class="card-title"><%= trainer.name %></span>
+      </div>
+      <div class="card-content">
+      <a href="/trainers/<%= trainer.id %>"><button class="black btn">View Trainer</button></a>
+        <p><%= trainer.description %></p>
+      </div>
+    </div>
+  </div>
+
+<% }); %>
 </ul>
+</div>
