@@ -10,7 +10,7 @@ const router = require('./config/router');
 const session = require('express-session');
 //requiring express-flash
 const flash = require('express-flash');
-// requiring body-parser which take info from use and takes it to the server
+// requiring body-parser which take info from user and takes it to the server
 const bodyParser = require('body-parser');
 // Import the methodOverride (for using the _method on Internet Explorer)
 const methodOverride = require('method-override');

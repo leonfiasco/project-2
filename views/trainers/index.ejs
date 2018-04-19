@@ -1,11 +1,7 @@
-<h1>Index</h1>
+
 <div class="row">
 <ul>
   <% trainers.forEach(trainer => { %>
-
-
-
-
   <div class="col s6 m6">
     <div class="card">
       <div class="card-image">
@@ -14,11 +10,10 @@
       </div>
       <div class="card-content">
       <a href="/trainers/<%= trainer.id %>"><button class="black btn">View Trainer</button></a>
-        <p><%= trainer.description %></p>
+        <p class='content1'><%= trainer.description %></p>
       </div>
     </div>
   </div>
-
 <% }); %>
 </ul>
 </div>
