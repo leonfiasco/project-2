@@ -13,3 +13,20 @@
 </div>
 
 <a href="/trainers/<%= trainer.id %>/edit"><button class='btn orange'>Edit Trainer</button></a>
+
+<h4>Post a comment</h4>
+<form action="trainers/<%= trainer.id %>/comments" method="post">
+  <input type="text" name="content">
+   <input type="submit">
+ </form>
+
+ <h4>Listing Comments</h4>
+ <% trainer.comments.forEach(comment => { %>
+   <div>
+     <p><strong><%= comment.user.username %></strong><%= comment.content %></p>
+     <form action="/trainers/<%= trainer.id %>/comments/<%= comment.id %>">
+       <input type="hidden" name="_method" id="input_field" value="delete">
+       <button type="submit">Delete Comment</button>
+     </form>
+   </div>
+   <% }); %>

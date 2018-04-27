@@ -12,8 +12,60 @@ function trainerIndex(req, res) {
 function trainersShow(req, res){
   Trainer
     .findById(req.params.id)
+    //populating the user data for each comment
+    .populate('comments.user')
     .exec()
-    .then(trainer => res.render('trainers/show', {trainer}));
+    .then(trainer => {
+      res.render('trainers/show', { trainer });
+    });
+}
+
+function commentsCreate(req, res){
+// fiding the trainer that the comment must be added to
+  Trainer
+    .findById(req.params.id)
+    .exec()
+    .then(trainer => {
+      // adding the current user to the comment form data
+      req.body.user = req.currentUser;
+
+      //creating a new comment with the form data
+      const comment = new Comment(req.body);
+
+      //pushing the comment iinto the array ofcomments for the photo
+      trainer.comments.push(comment);
+
+      //saving the photo
+      return trainer.save();
+    })
+    .then(trainer => {
+      //redirecting back to the photos show reviews
+      res.res.redirect(`/trainers/${trainer._id}`);
+    })
+    .catch(err => console.log(err));
+}
+
+
+
+function commentsDelete(req, res) {
+//fiinding the photo that the comment must be added to photo
+  trainerIndex
+    .findById(req.params.trainerId)
+    .exec()
+    .then(trainer => {
+      // finding the comment to delete by it's id
+      const comment = trainer.comment.id(req.params.commentId);
+      // fing that comment
+      comment.remove();
+
+      // saving the photo
+      return trainer.save();
+    })
+    .then(trainer => {
+    // redirecting back to the trainers show views
+      res.redirect(`/trainers/${trainer._id}`);
+    })
+    .catch(err => console.log(err));
 
 }
 
@@ -71,5 +123,8 @@ module.exports = {
   new: trainersNew,
   create: trainersCreate,
   edit: trainersEdit,
-  update: trainersUpdate
+  update: trainersUpdate,
+  createComment: commentsCreate,
+  deleteComment: commentsDelete
+
 };

@@ -38,8 +38,8 @@ router.route('/trainers/:id')
 router.route('/trainers/:id/edit')
   .get(trainers.edit);
 
-
 router.get('/logout', sessions.delete);
+
 
 //authentication
 router.route('/register')

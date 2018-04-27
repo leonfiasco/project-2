@@ -24,3 +24,43 @@ p{
 .content1{
   color: black;
 }
+
+#username{
+  color: white;
+}
+#email{
+  color: white;
+}
+#password{
+  color: white;
+}
+#passwordConfirmation{
+  color: white;
+}
+
+.email{
+  color: black;
+}
+.password{
+  color: black;
+}
+
+#name_field{
+color: white;
+}
+
+#year_field{
+color: white;
+}
+
+#description_field{
+color: white;
+}
+
+#url_field{
+color: white;
+}
+
+#input_field{
+  color: white;
+}
